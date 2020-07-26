@@ -146,11 +146,6 @@ function viewRoles(){
 //Add Employee
 function addEmployee(){
   
-  // Instantiate CLI-Table
-  var table = new Table({
-    head: ['ID','Department Name']
-    });
-
   var query = "SELECT * FROM role";
   connection.query(query, function(err, data){
     if (err) throw err;
