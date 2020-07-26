@@ -69,5 +69,3 @@ function employeeTrackerInit(){
       }
     });
 }
-
-employeeTrackerInit();
