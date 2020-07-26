@@ -208,39 +208,24 @@ function addRole(){
         name: "department",
         type: "list",
         message: "What department does the new role belong to?",
-        choices: [
-          "Accounting",
-          "Engineering",
-          "Human Resources",
-          "Communications",
-          "Research",
-          "Finance"
-        ]
+        choices: function(){
+          var deptList = [];
+          for(var i = 0; i < data.length; i++){
+            deptList.push({name: data[i].name, value: data[i].id});
+          }
+          return deptList;
+        }
       },
 
     ]).then(function(answer){
-      let departmentID;
-      //If Statement for departmentID
-      if(answer.department === "Accounting"){
-        departmentID = 1
-      }
-      if(answer.department === "Engineering"){
-        departmentID = 2
-      }
-      if(answer.department === "Human Resources"){
-        departmentID = 3
-      }
-      if(answer.department === "Communications"){
-        departmentID = 4
-      }
-      if(answer.department === "Research"){
-        departmentID = 5
-      }
-      if(answer.department === "Finance"){
-        departmentID = 6
-      }
+      
+      for (i = 0 ; i< data.length; i++) {
+        if (data[i].name === answer.department) {
+          answer.department = data[i].id;
+        };
+      }; 
 
-      connection.query("INSERT INTO role SET ?",{title: answer.role_title, salary: answer.role_salary, department_id: departmentID}, function(err, data){
+      connection.query("INSERT INTO role SET ?",{title: answer.role_title, salary: answer.role_salary, department_id: answer.department}, function(err, data){
         if (err) throw err;
         console.log("New role "+ answer.role_title +  " added to role table!");
         employeeTrackerInit();
