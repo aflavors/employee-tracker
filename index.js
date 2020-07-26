@@ -55,7 +55,7 @@ function employeeTrackerInit(){
           addEmployee();
           break;
         case "Add Role":
-          //addRole function
+          addRole();
           break;
         case "Add Department":
           //addDepartment function
@@ -183,6 +183,68 @@ function addEmployee(){
         console.log("New employee "+ answer.first_name + " " + answer.last_name + " added to employee table!");
         employeeTrackerInit();
       });
+    });
+  });
+};
+
+//Add Role
+function addRole(){
+  
+  var query = "SELECT * FROM department";
+  connection.query(query, function(err, data){
+    if (err) throw err;
+    inquirer.prompt([
+      {
+        name: "role_title",
+        type: "input",
+        message: "What is the new role's title"
+      },
+      {
+        name: "role_salary",
+        type: "input",
+        message: "What is the new role's salary?"
+      },
+      {
+        name: "department",
+        type: "list",
+        message: "What department does the new role belong to?",
+        choices: [
+          "Accounting",
+          "Engineering",
+          "Human Resources",
+          "Communications",
+          "Research",
+          "Finance"
+        ]
+      },
+
+    ]).then(function(answer){
+      let departmentID;
+      //If Statement for departmentID
+      if(answer.department === "Accounting"){
+        departmentID = 1
+      }
+      if(answer.department === "Engineering"){
+        departmentID = 2
+      }
+      if(answer.department === "Human Resources"){
+        departmentID = 3
+      }
+      if(answer.department === "Communications"){
+        departmentID = 4
+      }
+      if(answer.department === "Research"){
+        departmentID = 5
+      }
+      if(answer.department === "Finance"){
+        departmentID = 6
+      }
+
+      connection.query("INSERT INTO role SET ?",{title: answer.role_title, salary: answer.role_salary, department_id: departmentID}, function(err, data){
+        if (err) throw err;
+        console.log("New role "+ answer.role_title +  " added to role table!");
+      });
+      employeeTrackerInit()
     });
   });
 };
