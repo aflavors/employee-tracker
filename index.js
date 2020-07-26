@@ -19,12 +19,12 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
-  connection.end();
 });
 
 //Application Initialization
 
 function employeeTrackerInit(){
+
   inquirer
     .prompt({
       name: "main_prompt",
@@ -43,7 +43,7 @@ function employeeTrackerInit(){
     }).then(function(answer){
       switch (answer.main_prompt){
         case "View All Employees":
-          //viewEmployees function
+          viewEmployees();
           break;
         case "View All Departments":
           //viewDepartments function
@@ -69,3 +69,30 @@ function employeeTrackerInit(){
       }
     });
 }
+
+employeeTrackerInit();
+
+//Main_Prompt Switch Case Functions
+
+//View All Employees
+function viewEmployees(){
+  
+  // Instantiate CLI-Table
+  var table = new Table({
+    head: ['ID','First Name','Last Name']
+    });
+
+  var query = "SELECT id, first_name, last_name FROM employee";
+  connection.query(query, function(err, data){
+    if (err) throw err;
+    for (var i = 0; i < data.length; i++) {
+      var dataArr = [];
+      for(var key in data[i]){
+        dataArr.push(data[i][key]);
+      }
+      table.push(dataArr);
+    }
+    console.log(table.toString());
+    employeeTrackerInit();
+  });
+};
