@@ -52,7 +52,7 @@ function employeeTrackerInit(){
           viewRoles();
           break;
         case "Add Employee":
-          //addEmployee function
+          addEmployee();
           break;
         case "Add Role":
           //addRole function
@@ -140,5 +140,54 @@ function viewRoles(){
     }
     console.log(table.toString());
     employeeTrackerInit();
+  });
+};
+
+//Add Employee
+function addEmployee(){
+  
+  // Instantiate CLI-Table
+  var table = new Table({
+    head: ['ID','Department Name']
+    });
+
+  var query = "SELECT * FROM role";
+  connection.query(query, function(err, data){
+    if (err) throw err;
+    inquirer.prompt([
+      {
+        name: "first_name",
+        type: "input",
+        message: "What is the new employee's first name?"
+      },
+      {
+        name: "last_name",
+        type: "input",
+        message: "What is the new employee's last name?"
+      },
+      {
+        name: "role",
+        type: "list",
+        message: "What is the new employee's role?",
+        choices: function(){
+          var roleList = [];
+          for(var i = 0; i < data.length; i++){
+            roleList.push({name: data[i].title, value: data[i].id});
+          }
+          return roleList;
+        }
+      },
+    ]).then(function(answer){
+      for (i = 0 ; i< data.length; i ++) {
+        if (data[i].title === answer.role) {
+          answer.role_id = data[i].id;
+        };
+      }; 
+      connection.query("INSERT INTO employee SET ?",{first_name: answer.first_name, last_name: answer.last_name, role_id: answer.role}, function(err, data){
+        if (err) throw err;
+        console.log("New employee "+ answer.first_name + " " + answer.last_name + " added to employee table!");
+        employeeTrackerInit();
+      });
+    });
   });
 };
