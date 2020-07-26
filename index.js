@@ -49,7 +49,7 @@ function employeeTrackerInit(){
           viewDepartments();
           break;
         case "View All Roles":
-          //viewRoles function
+          viewRoles();
           break;
         case "Add Employee":
           //addEmployee function
@@ -106,6 +106,29 @@ function viewDepartments(){
     });
 
   var query = "SELECT * FROM department";
+  connection.query(query, function(err, data){
+    if (err) throw err;
+    for (var i = 0; i < data.length; i++) {
+      var dataArr = [];
+      for(var key in data[i]){
+        dataArr.push(data[i][key]);
+      }
+      table.push(dataArr);
+    }
+    console.log(table.toString());
+    employeeTrackerInit();
+  });
+};
+
+//View All Roles
+function viewRoles(){
+  
+  // Instantiate CLI-Table
+  var table = new Table({
+    head: ['ID','Position Title','Salary','Dept ID']
+    });
+
+  var query = "SELECT * FROM role";
   connection.query(query, function(err, data){
     if (err) throw err;
     for (var i = 0; i < data.length; i++) {
