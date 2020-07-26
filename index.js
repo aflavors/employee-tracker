@@ -243,8 +243,8 @@ function addRole(){
       connection.query("INSERT INTO role SET ?",{title: answer.role_title, salary: answer.role_salary, department_id: departmentID}, function(err, data){
         if (err) throw err;
         console.log("New role "+ answer.role_title +  " added to role table!");
+        employeeTrackerInit();
       });
-      employeeTrackerInit()
     });
   });
 };
