@@ -58,7 +58,7 @@ function employeeTrackerInit(){
           addRole();
           break;
         case "Add Department":
-          //addDepartment function
+          addDepartment();
           break;
         case "Update Employee Role":
           //updateRole function
@@ -233,3 +233,21 @@ function addRole(){
     });
   });
 };
+
+//Add Department
+function addDepartment(){
+
+  inquirer.prompt([
+    {
+      name: "dept",
+      type: "input",
+      message: "What is the name of the new department?"
+    }
+  ]).then(function(answer){
+    connection.query("INSERT INTO department SET ?", {name: answer.dept}, function(err, data){
+      if(err) throw err;
+      console.log("New department for " + answer.dept + " was added to department table!");
+      employeeTrackerInit();
+    });
+  });
+}
