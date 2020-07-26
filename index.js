@@ -61,7 +61,7 @@ function employeeTrackerInit(){
           addDepartment();
           break;
         case "Update Employee Role":
-          //updateRole function
+          updateRole();
           break;
         case "Exit Application":
           connection.end();
@@ -250,4 +250,53 @@ function addDepartment(){
       employeeTrackerInit();
     });
   });
-}
+};
+
+//Update Employee Role
+function updateRole(){
+    
+  var query = "SELECT * FROM employee";
+  connection.query(query, function(err, data){
+    if (err) throw err;
+    inquirer.prompt([
+      {
+        name: "employee_list",
+        type: "list",
+        message: "Select employee to be updated",
+        choices: function(){
+          var employeeList = [];
+          for(var i = 0; i < data.length; i++){
+            employeeList.push({name: data[i].first_name + " " + data[i].last_name, value: data[i].id});
+          }
+          return employeeList;
+        }
+      },
+
+    ]).then(function(answer){
+      var roleQuery = "SELECT title, id FROM role";
+      connection.query(roleQuery, function(err, data){
+        if (err) throw err;
+        inquirer.prompt([
+          {
+            name: "updated_role",
+            type: "list",
+            message: "Select employee's new role",
+            choices: function(){
+              var roleList = [];
+              for(var i = 0; i < data.length; i++){
+                roleList.push({name: data[i].title, value: data[i].id});
+              }
+              return roleList;
+            }
+          }
+        ]).then(function(roleAnswer){
+          connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [roleAnswer.updated_role, answer.employee_list], function(err, data){
+            if (err) throw err;
+            console.log("Success. This role has been updated in the employee table!");
+            employeeTrackerInit();
+          });
+        });
+      });
+    });
+  });
+};
