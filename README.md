@@ -19,8 +19,6 @@ Users are able to manage, update, and view company information by navigating the
 - Add Department
 - Update Employee Role
 
-![](assets/profile-generator.png)
-
 ### Installation
 
 Use the package manager [node](https://www.npmjs.com/) to run Employee Tracker.
@@ -32,7 +30,7 @@ The application will be invoked with the following comands:
 
 ### Demo
 
-Click [here][https://drive.google.com/file/d/1EmS9VxWDzJDpPXYC9O61i2dJxCOeJc0V/view] to view a video that demonstrates the entirety of the application's functionality.
+Click [here](https://drive.google.com/file/d/1EmS9VxWDzJDpPXYC9O61i2dJxCOeJc0V/view) to view a video that demonstrates the entirety of the application's functionality.
 
 ### Questions
 
